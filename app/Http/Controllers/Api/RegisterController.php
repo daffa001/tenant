@@ -6,16 +6,20 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthResource;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
+// use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class AuthController extends Controller
+class RegisterController extends Controller
 {
     public function index()
     {
         $users = User::get();
         if ($users->count() > 0) {
             return AuthResource::collection($users);
+            return response()->json([
+                'status' => Response::HTTP_OK
+            ],Response::HTTP_OK);
         } else {
             return response()->json(['message' => 'No record availble'], 200);
         }
@@ -28,7 +32,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required',
             'password' => 'required',
-            'role' => 'required',
+
         ]);
 
         if ($validator->fails()) {
@@ -42,12 +46,14 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'role' => $request->role,
+            'role' => 'user'
         ]);
 
+
         return response()->json([
-            'message' => 'Product Created Succesfully',
+            'message' => 'User Created Succesfully',
             'data' => new AuthResource($user),
+
         ], 200);
     }
 }

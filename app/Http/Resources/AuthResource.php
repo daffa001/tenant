@@ -23,7 +23,7 @@ class AuthResource extends JsonResource
             'created_at' => $this->created_at,
             'email_verified_at' => $this->email_verified_at,
             'remember_token' => $this->remember_token,
-            'role' => $this->role,
+            'role' => $this->token
 
 
         ];

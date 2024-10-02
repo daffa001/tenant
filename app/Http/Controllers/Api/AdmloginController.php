@@ -10,7 +10,7 @@ use App\Http\Resources\AuthResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends Controller
+class AdmloginController extends Controller
 {
     public function index()
     {
@@ -32,6 +32,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Invalid credentials',
@@ -41,6 +43,7 @@ class LoginController extends Controller
 
         // Mencari pengguna berdasarkan email
         $user = User::where('email', $request->email)->first();
+        $role = $user->role;
 
         // Memeriksa apakah pengguna ada dan password benar
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -48,13 +51,20 @@ class LoginController extends Controller
                 'message' => 'Invalid credentials',
             ], 401);
         }
-        $user->createToken('access-token')->plainTextToken;
+
+        if ($role != 'admin') {
+            return response()->json([
+                'message' => 'Acces denied : Admin only',
+            ], 401);
+        }
+        
 
         // Membuat token untuk pengguna jika menggunakan Laravel Sanctum
         // $token = $user->createToken('MyApp')->plainTextToken;
 
         return response()->json([
-            'message' => 'Login successful',
+            'message' => 'Login admin successful',
+            // 'token' => $token,
         ]);
     }
 }
