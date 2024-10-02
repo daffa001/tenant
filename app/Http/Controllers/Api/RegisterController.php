@@ -12,27 +12,26 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    public function index()
-    {
-        $users = User::get();
-        if ($users->count() > 0) {
-            return AuthResource::collection($users);
-            return response()->json([
-                'status' => Response::HTTP_OK
-            ],Response::HTTP_OK);
-        } else {
-            return response()->json(['message' => 'No record availble'], 200);
-        }
-    }
+    // public function index()
+    // {
+    //     $users = User::get();
+    //     if ($users->count() > 0) {
+    //         return AuthResource::collection($users);
+    //         return response()->json([
+    //             'status' => Response::HTTP_OK
+    //         ],Response::HTTP_OK);
+    //     } else {
+    //         return response()->json(['message' => 'No record availble'], 200);
+    //     }
+    // }
 
     public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required',
-            'password' => 'required',
-
+            'name' => 'required|string|max:50',
+            'email' => 'required|unique:users,email',
+            'password' => 'required|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -52,7 +51,7 @@ class RegisterController extends Controller
 
         return response()->json([
             'message' => 'User Created Succesfully',
-            'data' => new AuthResource($user),
+            // 'data' => new AuthResource($user),
 
         ], 200);
     }

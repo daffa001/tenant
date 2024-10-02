@@ -12,24 +12,24 @@ use Illuminate\Support\Facades\Validator;
 
 class AdmloginController extends Controller
 {
-    public function index()
-    {
-        $users = User::get();
-        if ($users->count() > 0) {
-            return AuthResource::collection($users);
-            return response()->json([
-                'status' => Response::HTTP_OK
-            ],Response::HTTP_OK);
-        } else {
-            return response()->json(['message' => 'No record availble'], 200);
-        }
-    }
+    // public function index()
+    // {
+    //     $users = User::get();
+    //     if ($users->count() > 0) {
+    //         return AuthResource::collection($users);
+    //         return response()->json([
+    //             'status' => Response::HTTP_OK
+    //         ],Response::HTTP_OK);
+    //     } else {
+    //         return response()->json(['message' => 'No record availble'], 200);
+    //     }
+    // }
 
     public function store(Request $request){
         // Validasi data input
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|min:8',
         ]);
 
 
